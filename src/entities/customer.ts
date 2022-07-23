@@ -1,7 +1,9 @@
+import Address from './address'
+
 export default class Customer {
   _id: string
   _name: string = ''
-  _address: string = ''
+  _address!: Address
   _active: boolean = false
 
   constructor (id: string, name: string) {
@@ -30,5 +32,10 @@ export default class Customer {
 
   deactivate (): void {
     this._active = false
+  }
+
+  set Address (address: Address) {
+    this._address = address
+    this.validate()
   }
 }
