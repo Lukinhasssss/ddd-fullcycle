@@ -16,7 +16,7 @@ describe('Customer unit tests', () => {
     expect(customer.name).toBe('Vinsmoke Sanji')
   })
 
-  test('should throw an error if change name passing an empty value', () => {
+  test('should throw an error if try to change name passing an empty value', () => {
     const customer = new Customer('1', 'Roronoa Zoro')
     expect(() => customer.changeName('')).toThrowError('Customer name is required')
   })
