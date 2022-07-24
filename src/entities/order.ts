@@ -18,6 +18,7 @@ export default class Order {
     if (!this._id) throw new Error('Order id is required')
     if (!this._customerId) throw new Error('Order customerId is required')
     if (!this._items.length) throw new Error('Order items is required')
+    if (this._items.some(item => item.quantity <= 0)) throw new Error('Order items quantity must be greater than zero')
 
     return true
   }
