@@ -18,7 +18,6 @@ export default class Customer {
 
   validate (): void {
     if (!this._id) throw new Error('Customer id is required')
-
     if (!this._name) throw new Error('Customer name is required')
   }
 
