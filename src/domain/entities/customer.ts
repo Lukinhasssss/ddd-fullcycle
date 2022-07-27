@@ -21,18 +21,26 @@ export default class Customer {
     return this._name
   }
 
-  get rewardPoints (): number {
-    return this._rewardPoints
+  get address (): Address {
+    return this._address
   }
 
-  validate (): void {
-    if (!this._id) throw new Error('Customer id is required')
-    if (!this._name) throw new Error('Customer name is required')
+  set address (address: Address) {
+    this._address = address
+    this.validate()
+  }
+
+  get rewardPoints (): number {
+    return this._rewardPoints
   }
 
   changeName (name: string): void {
     this._name = name
     this.validate()
+  }
+
+  changeAddress (address: Address): void {
+    this._address = address
   }
 
   activate (): void {
@@ -52,8 +60,8 @@ export default class Customer {
     this._rewardPoints += points
   }
 
-  set Address (address: Address) {
-    this._address = address
-    this.validate()
+  validate (): void {
+    if (!this._id) throw new Error('Customer id is required')
+    if (!this._name) throw new Error('Customer name is required')
   }
 }
