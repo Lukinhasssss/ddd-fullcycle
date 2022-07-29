@@ -28,7 +28,7 @@ describe('Customer repository tests', () => {
 
     const customer = new Customer('1', 'Monkey D. Luffy')
     const address = new Address('Rua das Flores', 7, 'Onigashima', '74110-000')
-    customer.address = address
+    customer.changeAddress(address)
     await customerRepository.create(customer)
 
     const customerModel = await CustomerModel.findOne({ where: { id: '1' } })
@@ -49,7 +49,7 @@ describe('Customer repository tests', () => {
     const customerRepository = new CustomerRepository()
     const customer = new Customer('1', 'Monkey D. Luffy')
     const address = new Address('Rua das Flores', 7, 'Onigashima', '74110-000')
-    customer.address = address
+    customer.changeAddress(address)
     await customerRepository.create(customer)
 
     customer.changeName('Vinsmoke Sanji')
@@ -72,7 +72,7 @@ describe('Customer repository tests', () => {
     const customerRepository = new CustomerRepository()
     const customer = new Customer('1', 'Monkey D. Luffy')
     const address = new Address('Rua das Flores', 7, 'Onigashima', '74110-000')
-    customer.address = address
+    customer.changeAddress(address)
     await customerRepository.create(customer)
 
     const customerResult = await customerRepository.findById(customer.id)
@@ -93,8 +93,8 @@ describe('Customer repository tests', () => {
     const customer2 = new Customer('2', 'Nami')
 
     const address = new Address('Rua das Flores', 7, 'Onigashima', '74110-000')
-    customer1.address = address
-    customer2.address = address
+    customer1.changeAddress(address)
+    customer2.changeAddress(address)
 
     await customerRepository.create(customer1)
     await customerRepository.create(customer2)

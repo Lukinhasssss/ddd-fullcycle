@@ -48,7 +48,7 @@ export default class CustomerRepository implements CustomerRepositoryInterface {
       customerModel.city,
       customerModel.zipcode
     )
-    customer.address = address
+    customer.changeAddress(address)
     return customer
   }
 
@@ -65,7 +65,7 @@ export default class CustomerRepository implements CustomerRepositoryInterface {
         customerModel.city,
         customerModel.zipcode
       )
-      customer.address = address
+      customer.changeAddress(address)
 
       if (customerModel.active) customer.activate()
 

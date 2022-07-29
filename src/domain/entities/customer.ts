@@ -25,11 +25,6 @@ export default class Customer {
     return this._address
   }
 
-  set address (address: Address) {
-    this._address = address
-    this.validate()
-  }
-
   get rewardPoints (): number {
     return this._rewardPoints
   }

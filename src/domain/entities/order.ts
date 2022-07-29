@@ -14,6 +14,22 @@ export default class Order {
     this.validate()
   }
 
+  get id (): string {
+    return this._id
+  }
+
+  get customerId (): string {
+    return this._customerId
+  }
+
+  get items (): OrderItem[] {
+    return this._items
+  }
+
+  total (): number {
+    return this._items.reduce((acc, item) => acc + item.price, 0)
+  }
+
   validate (): boolean {
     if (!this._id) throw new Error('Order id is required')
     if (!this._customerId) throw new Error('Order customerId is required')
@@ -21,9 +37,5 @@ export default class Order {
     if (this._items.some(item => item.quantity <= 0)) throw new Error('Order items quantity must be greater than zero')
 
     return true
-  }
-
-  total (): number {
-    return this._items.reduce((acc, item) => acc + item.price, 0)
   }
 }
