@@ -27,7 +27,7 @@ export default class Order {
   }
 
   total (): number {
-    return this._items.reduce((acc, item) => acc + item.price, 0)
+    return this._items.reduce((acc, item) => acc + item.totalPrice, 0)
   }
 
   validate (): boolean {
