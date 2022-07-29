@@ -66,4 +66,26 @@ describe('Order repository tests', () => {
       ]
     })
   })
+
+  test('should find an order by id', async () => {
+    const customerRepository = new CustomerRepository()
+    const customer = new Customer('1', 'Monkey D. Luffy')
+    const address = new Address('Rua das Flores', 7, 'Onigashima', '74110-000')
+    customer.changeAddress(address)
+    await customerRepository.create(customer)
+
+    const productRepository = new ProductRepository()
+    const product = new Product('1', 'Product 1', 100)
+    await productRepository.create(product)
+
+    const orderItem = new OrderItem('1', product.name, product.price, product.id, 2)
+    const order = new Order('1', customer.id, [orderItem])
+
+    const orderRepository = new OrderRepository()
+    await orderRepository.create(order)
+
+    const orderFound = await orderRepository.findById(order.id)
+
+    expect(orderFound).toStrictEqual(order)
+  })
 })
