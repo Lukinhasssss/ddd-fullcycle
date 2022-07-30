@@ -31,4 +31,28 @@ describe('Order unit tests', () => {
     expect(() => new Order('1', '1', [item1])).toThrowError('Order items quantity must be greater than zero')
     expect(() => new Order('1', '1', [item2])).toThrowError('Order items quantity must be greater than zero')
   })
+
+  test('should add new items', () => {
+    const item1 = new OrderItem('1', 'Item 1', 100, '1', 2)
+    const item2 = new OrderItem('1', 'Item 1', 320, '2', 2)
+    const order = new Order('1', '1', [item1])
+
+    order.addItems([item2])
+
+    expect(order.items).toEqual([item1, item2])
+  })
+
+  test('should remove items', () => {
+    const item1 = new OrderItem('1', 'Item 1', 100, '1', 2)
+    const item2 = new OrderItem('2', 'Item 2', 320, '2', 2)
+    const order = new Order('1', '1', [item1, item2])
+
+    order.removeItems([item1])
+
+    expect(order.items).toEqual([item2])
+
+    order.removeItems([item2])
+
+    expect(order.items).toEqual([])
+  })
 })
