@@ -3,8 +3,8 @@ import OrderItem from './order_item'
 export default class Order {
   private readonly _id: string
   private readonly _customerId: string
-  private readonly _items: OrderItem[]
-  private readonly _total: number
+  private _items: OrderItem[]
+  private _total: number
 
   constructor (id: string, customerId: string, items: OrderItem[]) {
     this._id = id
@@ -37,5 +37,23 @@ export default class Order {
     if (this._items.some(item => item.quantity <= 0)) throw new Error('Order items quantity must be greater than zero')
 
     return true
+  }
+
+  private addItem (item: OrderItem): void {
+    this._items.push(item)
+    this._total = this.total()
+  }
+
+  addItems (items: OrderItem[]): void {
+    items.map(item => this.addItem(item))
+  }
+
+  private removeItem (item: OrderItem): void {
+    this._items = this._items.filter(i => i.id !== item.id)
+    this._total = this.total()
+  }
+
+  removeItems (items: OrderItem[]): void {
+    items.map(item => this.removeItem(item))
   }
 }
