@@ -33,19 +33,23 @@ describe('Order repository tests', () => {
 
   test('should create an order', async () => {
     const customerRepository = new CustomerRepository()
+    const productRepository = new ProductRepository()
+    const orderRepository = new OrderRepository()
+
     const customer = new Customer('1', 'Monkey D. Luffy')
     const address = new Address('Rua das Flores', 7, 'Onigashima', '74110-000')
     customer.changeAddress(address)
     await customerRepository.create(customer)
 
-    const productRepository = new ProductRepository()
-    const product = new Product('1', 'Product 1', 100)
-    await productRepository.create(product)
+    const product1 = new Product('1', 'Product 1', 100)
+    const product2 = new Product('2', 'Product 2', 200)
+    await productRepository.create(product1)
+    await productRepository.create(product2)
 
-    const orderItem = new OrderItem('1', product.name, product.price, product.id, 2)
-    const order = new Order('1', customer.id, [orderItem, orderItem])
+    const orderItem1 = new OrderItem('1', product1.name, product1.price, product1.id, 2)
+    const orderItem2 = new OrderItem('2', product2.name, product2.price, product2.id, 1)
+    const order = new Order('1', customer.id, [orderItem1, orderItem2])
 
-    const orderRepository = new OrderRepository()
     await orderRepository.create(order)
 
     const orderModel = await OrderModel.findOne({ where: { id: order.id }, include: ['items'] })
@@ -56,14 +60,105 @@ describe('Order repository tests', () => {
       total: order.total(),
       items: [
         {
-          id: orderItem.id,
-          name: orderItem.name,
-          price: orderItem.price,
-          quantity: orderItem.quantity,
+          id: orderItem1.id,
+          name: orderItem1.name,
+          price: orderItem1.price,
+          quantity: orderItem1.quantity,
           orderId: order.id,
-          productId: orderItem.productId
+          productId: orderItem1.productId
+        },
+        {
+          id: orderItem2.id,
+          name: orderItem2.name,
+          price: orderItem2.price,
+          quantity: orderItem2.quantity,
+          orderId: order.id,
+          productId: orderItem2.productId
         }
       ]
+    })
+  })
+
+  test('should update an order adding new items', async () => {
+    const customerRepository = new CustomerRepository()
+    const productRepository = new ProductRepository()
+    const orderRepository = new OrderRepository()
+
+    const customer = new Customer('1', 'Monkey D. Luffy')
+    const address = new Address('Rua das Flores', 7, 'Onigashima', '74110-000')
+    customer.changeAddress(address)
+    await customerRepository.create(customer)
+
+    const product1 = new Product('1', 'Product 1', 210)
+    const product2 = new Product('2', 'Product 2', 120)
+    await productRepository.create(product1)
+    await productRepository.create(product2)
+
+    const orderItem1 = new OrderItem('1', product1.name, product1.price, product1.id, 2)
+    const order = new Order('1', customer.id, [orderItem1])
+    await orderRepository.create(order)
+
+    const orderItem2 = new OrderItem('2', product2.name, product2.price, product2.id, 1)
+    order.addItems([orderItem2])
+    await orderRepository.update(order)
+
+    const orderModel = await OrderModel.findOne({ where: { id: order.id }, include: ['items'] })
+
+    expect(orderModel.toJSON()).toStrictEqual({
+      id: order.id,
+      customerId: customer.id,
+      total: order.total(),
+      items: [
+        {
+          id: orderItem1.id,
+          name: orderItem1.name,
+          price: orderItem1.price,
+          quantity: orderItem1.quantity,
+          orderId: order.id,
+          productId: orderItem1.productId
+        },
+        {
+          id: orderItem2.id,
+          name: orderItem2.name,
+          price: orderItem2.price,
+          quantity: orderItem2.quantity,
+          orderId: order.id,
+          productId: orderItem2.productId
+        }
+      ]
+    })
+  })
+
+  test('should update an order removing items', async () => {
+    const customerRepository = new CustomerRepository()
+    const productRepository = new ProductRepository()
+    const orderRepository = new OrderRepository()
+
+    const customer = new Customer('1', 'Monkey D. Luffy')
+    const address = new Address('Rua das Flores', 7, 'Onigashima', '74110-000')
+    customer.changeAddress(address)
+    await customerRepository.create(customer)
+
+    const product1 = new Product('1', 'Product 1', 210)
+    const product2 = new Product('2', 'Product 2', 120)
+    await productRepository.create(product1)
+    await productRepository.create(product2)
+
+    const orderItem1 = new OrderItem('1', product1.name, product1.price, product1.id, 2)
+    const orderItem2 = new OrderItem('2', product2.name, product2.price, product2.id, 1)
+    const order = new Order('1', customer.id, [orderItem1, orderItem2])
+    await orderRepository.create(order)
+
+    order.removeItems([orderItem1, orderItem2])
+    await orderRepository.update(order)
+
+    const orderModel = await OrderModel.findOne({ where: { id: order.id }, include: ['items'] })
+
+    expect(orderModel.toJSON()).toStrictEqual({
+      id: order.id,
+      customerId: customer.id,
+      total: order.total(),
+      items: []
     })
   })
 
